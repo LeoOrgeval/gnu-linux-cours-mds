@@ -11,13 +11,13 @@
 
 
 ## Remarques et motivations
- Nous avons retenu Flask + Gunicorn + Caddy + Fail2ban pour proposer une solution simple, lisible et testable rapidement sur Debian.
-
-Les credentials sont places dans le code, comme demande dans l'énoncé, pour éviter toute complexité inutile de base de données.
+ >Nous avons retenu Flask + Gunicorn + Caddy + Fail2ban pour proposer une solution simple, lisible et testable rapidement sur Debian.
+>
+>Les credentials sont places dans le code, comme demande dans l'énoncé, pour éviter toute complexité inutile de base de données.
 
 ## Objectif fonctionnel
 
-L'application expose une route `/login` pour s'authentifier. Une fois connecté, l'utilisateur peut accéder a `/private`, qui retourne le message :
+L'application expose une route `/login` pour s'authentifier. Une fois connecté, l'utilisateur peut accéder à `/private`, qui retourne le message :
 
 `Accès au contenu prive autorisé`
 
@@ -96,7 +96,7 @@ sudo systemctl status gunicorn-flask-auth --no-pager
 
 ## Partie 2 - Caddy en reverse proxy
 
-Choix : Caddy. Il ecoute sur le port 80 et reverse-proxy l'application Gunicorn locale sur `127.0.0.1:8000`.
+>Choix : Caddy. Il ecoute sur le port 80 et reverse-proxy l'application Gunicorn locale sur `127.0.0.1:8000`.
 
 Installer la configuration Caddy :
 
@@ -119,15 +119,15 @@ Vérifier le reverse proxy :
 curl -i http://127.0.0.1/login
 ```
 
-Resultat attendu: une reponse HTTP `200` avec une page HTML de connexion.
+Résultat attendu: une réponse HTTP `200` avec une page HTML de connexion.
 
 ## Partie 3 - fail2ban (jail anti brute force)
 
-Definition de l'activite suspecte:
+Définition de l'activité suspecte:
 
-- 5 echecs de connexion sur `/login`
+- 5 échecs de connexion sur `/login`
 - Dans une fenetre de 10 minutes
-- Meme IP source
+- Même IP source
 - SoftBan pendant 1 heure
 
 Installer le filtre et la jail :
@@ -137,7 +137,7 @@ sudo cp probleme2/config/fail2ban/filter.d/flask-login.conf /etc/fail2ban/filter
 sudo cp probleme2/config/fail2ban/jail.d/flask-login.local /etc/fail2ban/jail.d/flask-login.local
 ```
 
-Activer et verifier fail2ban :
+Activer et vérifier fail2ban :
 
 ```bash
 sudo systemctl enable --now fail2ban
@@ -157,7 +157,7 @@ Résultat attendu :
 Credentials de test disponibles dans le code :
 
 - `admin / admin123`
-- `alice / alice123`
+- `test / test123`
 
 Lancer le script de vérification :
 
@@ -167,11 +167,11 @@ bash probleme2/scripts/test_login.sh http://127.0.0.1
 
 Ce script valide 3 points :
 
-- Login valide puis accès a `/private`
+- Login valide puis accès à `/private`
 - Login invalide avec retour HTTP `401`
 - Simulation de 5 échecs pour déclencher fail2ban
 
-Vérifier ensuite le bannissement :
+Vérifier ensuite le ban :
 
 ```bash
 sudo fail2ban-client status flask-login
@@ -179,7 +179,7 @@ sudo fail2ban-client status flask-login
 
 Contrôler la section `Banned IP list`.
 
-Pour débannir localement et relancer un test :
+Pour déban localement et relancer un test :
 
 ```bash
 sudo fail2ban-client set flask-login unbanip 127.0.0.1
@@ -204,7 +204,7 @@ Si la page `/login` ne repond pas :
 - Vérifier `gunicorn-flask-auth` puis `caddy`.
 - Vérifier que Gunicorn écoute bien `127.0.0.1:8000`.
 
-Si fail2ban ne bannit pas :
+Si fail2ban ne ban pas :
 
 - Vérifier que le fichier `/var/log/flask-auth/app.log` est bien alimenté.
 - Vérifier la jail : `sudo fail2ban-client status flask-login`.
