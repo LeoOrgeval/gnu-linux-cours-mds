@@ -1,0 +1,16 @@
+[Unit]
+Description=Gunicorn service for Flask auth app
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/probleme2/app
+Environment=APP_SECRET_KEY=change-this-secret
+Environment=APP_LOG_FILE=/var/log/flask-auth/app.log
+ExecStart=/usr/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 app:app
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

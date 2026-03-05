@@ -1,0 +1,9 @@
+[flask-login]
+enabled = true
+filter = flask-login
+logpath = /var/log/flask-auth/app.log
+maxretry = 5
+findtime = 600
+bantime = 3600
+banaction = nftables-multiport
+port = http,https
