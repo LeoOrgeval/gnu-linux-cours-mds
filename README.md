@@ -128,7 +128,7 @@ Definition de l'activite suspecte:
 - 5 echecs de connexion sur `/login`
 - Dans une fenetre de 10 minutes
 - Meme IP source
-- Bannissement pendant 1 heure
+- SoftBan pendant 1 heure
 
 Installer le filtre et la jail:
 
@@ -212,7 +212,7 @@ Si fail2ban ne bannit pas:
 
 ## References
 
-- Documentation Caddy
-- Documentation Fail2ban
-- Documentation Flask
-- Documentation Gunicorn
+- [Documentation Caddy](https://caddyserver.com/docs/)
+- [Documentation Fail2ban](https://fail2ban.readthedocs.io/en/latest/)
+- [Documentation Flask](https://flask.palletsprojects.com/en/stable/)
+- [Documentation Gunicorn](https://gunicorn.org/quickstart/)
